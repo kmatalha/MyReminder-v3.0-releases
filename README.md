@@ -1,0 +1,75 @@
+# MyReminder v3.2.3 - Tauri Desktop & Web Reminder Suite
+
+**MyReminder v3.2.3** is an optimized, high-performance desktop reminder and recurring bill management application built with **React 19, TypeScript, Tailwind CSS, and Tauri (Rust)**. It features an in-app silent update downloader and installer launcher, interactive Web Audio alarm synthesizer, customizable alarm tones, dedicated standalone alarm HUD with automatic closure, DPI-aware persistent window sizing, WiX upgrade-code installer upgrade support, system tray support, desktop push notifications, and automated GitHub Actions cloud packaging.
+
+---
+
+## ⚡ Standalone Windows Build with Tauri
+
+This app is built using **Tauri** (Rust + WebView2), producing lightweight (~10-15MB) native Windows executables without requiring heavy runtimes like Electron.
+
+### 1. Local Development
+```bash
+# Install dependencies
+npm install
+
+# Run Web Dev Server
+npm run dev
+
+# Run Tauri Desktop App in Development Mode (requires Rust)
+npm run tauri:dev
+```
+
+### 2. Build Windows Executable & Installer Locally
+```bash
+# Build standalone Windows installer (.msi & .exe)
+npm run tauri:build
+```
+The compiled installer will be located in `src-tauri/target/release/bundle/msi/` and `src-tauri/target/release/bundle/nsis/`.
+
+---
+
+## 🚀 Automatic GitHub Actions Build (Cloud EXE)
+
+You can build the Windows installer without setting up Rust locally:
+
+1. **Push this repository to GitHub**:
+   ```bash
+   git add .
+   git commit -m "Update MyReminder"
+   git push origin main
+   ```
+2. Go to the **Actions** tab on your GitHub repository.
+3. The **"Build & Release Windows Desktop App"** workflow builds the standalone installer automatically.
+4. **Automatic Public Release**: Upon build completion, the workflow automatically publishes a new public release in your target public release repository **[kmatalha/MyReminder-v3.0-releases](https://github.com/kmatalha/MyReminder-v3.0-releases)** containing both `.exe` and `.msi` Windows setup files!
+5. **Artifacts Backup**: Setup installers are also attached directly under **Artifacts** in your private build action logs.
+
+---
+
+## 🛠️ Troubleshooting & Uninstaller FAQ (For Power Users)
+
+**1. Where is my `myreminder_v3.db` Database File?**
+Windows MSI installers install the app into protected read-only directories like `C:\Program Files`. Apps cannot write database files here without Administrator prompts. Therefore, your database is safely stored in your Windows AppData folder (`%APPDATA%\my-reminder\`). You can open this folder directly via the "Open Folder" button in the App's **Settings > Installation Directory**.
+
+**2. Why is the app still in my Startup folder after uninstalling?**
+When you enable "Run at Windows Startup" in the app, it dynamically generates a shortcut in your Start Menu and Windows Registry. The standard MSI uninstaller doesn't know about files created after installation.
+**Fix:** Open the app, go to Settings, and **uncheck** "Run at Windows Startup" to run the clean-up script. *Then* uninstall the app.
+
+**3. How do I update without losing data?**
+Just download the new `.msi` or `.exe` installer from GitHub Releases and run it. It will natively overwrite the program binaries in `Program Files`, while leaving your database in `AppData` completely untouched.
+
+---
+
+## ✨ Core Features
+
+- 📁 **Dedicated Directory & Database Manager**: Selects your target installation directory on disk, creates a dedicated `MyReminder_v3.0/` folder with `myreminder_v3.db`, and preserves database records across app updates with zero data loss.
+- 📐 **DPI-Aware Window Size & Position Memory**: Automatically captures and restores your custom window geometry and display coordinates across PC boots with High-DPI scaling protection.
+- ⏰ **Customizable Overdue Alarm Rules**: Option to stop alarms from ringing once the scheduled due date has passed.
+- 🚨 **Dedicated Standalone Alarm Screen**: Clean, distraction-free alarm view with instant "Mark as Paid", quick snooze (+15m / custom), silence/dismiss, and seamless dashboard switching.
+- 🔔 **Multi-Tone Polyphonic Alarm Synthesizer**: Custom Web Audio tones + Custom MP3/WAV uploads + dynamic audio loops.
+- 💳 **Mark as Paid & Quick Actions**: Instant "Mark as Paid" button and quick controls on alarm overlays and bill cards.
+- 📌 **Native System Tray Integration**: Minimizes to the Windows System Tray via Tauri Rust tray.
+- ⚙️ **Autostart & Tray Controls**: System tray context menu to open or exit the app cleanly.
+- 📊 **Analytics & History**: Expense analytics, calendar schedule views, and payment history logs.
+- 💾 **Data Safety**: JSON import/export backup system & persistent local storage.
+
